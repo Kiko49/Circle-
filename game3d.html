@@ -1,206 +1,362 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
+
 <head>
 <meta charset="UTF-8">
+
 <meta name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+content="width=device-width,
+initial-scale=1.0,
+maximum-scale=1.0,
+user-scalable=no">
 
 <title>Circle</title>
 
 <style>
-    * {
-        box-sizing: border-box;
-    }
 
-    html, body {
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-        background: black;
-        font-family: Arial, sans-serif;
-        touch-action: none;
-    }
+* {
+    box-sizing: border-box;
+}
 
-    #game {
-        position: fixed;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-    }
+html, body {
+    margin: 0;
+    padding: 0;
 
-    /* Картинка игрока сверху */
-    #playerIcon {
-        position: fixed;
-        top: 15px;
-        right: 15px;
+    width: 100%;
+    height: 100%;
 
-        width: 180px;
-        height: 180px;
+    overflow: hidden;
 
-        object-fit: contain;
-        z-index: 10;
+    background: black;
 
-        pointer-events: none;
-    }
+    font-family: Arial, sans-serif;
 
-    /* Кнопки управления */
-    #controls {
-        position: fixed;
-        left: 20px;
-        bottom: 25px;
+    touch-action: none;
+}
 
-        width: 180px;
-        height: 150px;
+#game {
+    position: fixed;
 
-        z-index: 20;
-    }
+    left: 0;
+    top: 0;
 
-    .control {
-        position: absolute;
+    width: 100%;
+    height: 100%;
+}
 
-        width: 55px;
-        height: 55px;
 
-        border: 2px solid white;
-        border-radius: 10px;
+/* =========================
+   PLAYER PORTRAIT
+========================= */
 
-        background: rgba(0, 0, 0, 0.55);
-        color: white;
+#playerIcon {
 
-        font-size: 25px;
-        font-weight: bold;
+    position: fixed;
 
-        display: flex;
-        justify-content: center;
-        align-items: center;
+    top: 0;
+    right: 0;
 
-        user-select: none;
-        -webkit-user-select: none;
-    }
+    width: 180px;
+    height: 180px;
 
-    .control:active {
-        background: rgba(255, 255, 255, 0.3);
-    }
+    object-fit: contain;
 
-    #up {
-        left: 62px;
-        top: 0;
-    }
+    z-index: 10;
 
-    #down {
-        left: 62px;
-        bottom: 0;
-    }
+    pointer-events: none;
+}
 
-    #left {
-        left: 0;
-        top: 62px;
-    }
 
-    #right {
-        right: 0;
-        top: 62px;
-    }
+/* =========================
+   CONTROLS
+========================= */
 
-    /* Диалог */
-    #dialogue {
-        position: fixed;
+#controls {
 
-        left: 0;
-        bottom: 0;
+    position: fixed;
 
-        width: 100%;
-        height: 30%;
+    left: 20px;
+    bottom: 25px;
 
-        background: rgba(0, 0, 0, 0.9);
+    width: 180px;
+    height: 150px;
 
-        border-top: 3px solid white;
+    z-index: 40;
+}
 
-        color: white;
 
-        z-index: 30;
+.control {
 
-        display: none;
+    position: absolute;
 
-        padding: 20px;
-    }
+    width: 55px;
+    height: 55px;
 
-    #speaker {
-        font-size: 24px;
-        font-weight: bold;
+    border: 2px solid white;
 
-        margin-bottom: 10px;
-    }
+    border-radius: 10px;
 
-    #text {
-        font-size: 20px;
-        line-height: 1.4;
+    background: rgba(0,0,0,0.55);
 
-        width: calc(100% - 220px);
-    }
+    color: white;
 
-    #dialoguePortrait {
-        position: absolute;
+    font-size: 25px;
+    font-weight: bold;
 
-        right: 25px;
-        bottom: 10px;
+    display: flex;
 
-        width: 180px;
-        height: 180px;
+    justify-content: center;
+    align-items: center;
 
-        object-fit: contain;
-    }
+    user-select: none;
+    -webkit-user-select: none;
 
-    #dialogueHint {
-        position: absolute;
+    touch-action: none;
+}
 
-        right: 20px;
-        bottom: 10px;
 
-        font-size: 13px;
-        opacity: 0.6;
-    }
+.control:active {
+
+    background:
+    rgba(255,255,255,0.3);
+}
+
+
+#up {
+
+    left: 62px;
+    top: 0;
+}
+
+
+#down {
+
+    left: 62px;
+    bottom: 0;
+}
+
+
+#left {
+
+    left: 0;
+    top: 62px;
+}
+
+
+#right {
+
+    right: 0;
+    top: 62px;
+}
+
+
+/* =========================
+   NPC INTERACTION HINT
+========================= */
+
+#interactHint {
+
+    position: fixed;
+
+    left: 50%;
+
+    bottom: 32%;
+
+    transform:
+    translateX(-50%);
+
+    padding:
+    10px 18px;
+
+    background:
+    rgba(0,0,0,0.75);
+
+    border:
+    2px solid white;
+
+    border-radius: 8px;
+
+    color: white;
+
+    font-size: 17px;
+
+    z-index: 35;
+
+    display: none;
+
+    text-align: center;
+
+    white-space: nowrap;
+}
+
+
+/* =========================
+   DIALOGUE
+========================= */
+
+#dialogue {
+
+    position: fixed;
+
+    left: 0;
+    bottom: 0;
+
+    width: 100%;
+
+    height: 30%;
+
+    background:
+    rgba(0,0,0,0.9);
+
+    border-top:
+    3px solid white;
+
+    color: white;
+
+    z-index: 50;
+
+    display: none;
+
+    padding: 20px;
+
+    cursor: pointer;
+}
+
+
+#speaker {
+
+    font-size: 24px;
+
+    font-weight: bold;
+
+    margin-bottom: 10px;
+}
+
+
+#text {
+
+    font-size: 20px;
+
+    line-height: 1.4;
+
+    width:
+    calc(100% - 220px);
+}
+
+
+#dialoguePortrait {
+
+    position: absolute;
+
+    right: 25px;
+    bottom: 10px;
+
+    width: 180px;
+    height: 180px;
+
+    object-fit: contain;
+}
+
+
+#dialogueHint {
+
+    position: absolute;
+
+    right: 20px;
+    bottom: 10px;
+
+    font-size: 13px;
+
+    opacity: 0.6;
+}
+
 </style>
 </head>
 
+
 <body>
+
 
 <div id="game"></div>
 
-<!-- Портрет игрока -->
-<img id="playerIcon" src="images/player.png">
 
-<!-- Управление -->
+<!-- Player portrait -->
+
+<img
+id="playerIcon"
+src="images/player.png"
+>
+
+
+<!-- Interaction hint -->
+
+<div id="interactHint">
+    Click the character to talk
+</div>
+
+
+<!-- Controls -->
+
 <div id="controls">
 
-    <div class="control" id="up">▲</div>
-    <div class="control" id="down">▼</div>
-    <div class="control" id="left">◀</div>
-    <div class="control" id="right">▶</div>
+    <div
+    class="control"
+    id="up">
+        ▲
+    </div>
+
+    <div
+    class="control"
+    id="down">
+        ▼
+    </div>
+
+    <div
+    class="control"
+    id="left">
+        ◀
+    </div>
+
+    <div
+    class="control"
+    id="right">
+        ▶
+    </div>
 
 </div>
 
-<!-- Диалог -->
+
+<!-- Dialogue -->
+
 <div id="dialogue">
 
-    <div id="speaker">AAA</div>
-
-    <div id="text">
-        Эй... ты меня слышишь?
+    <div id="speaker">
+        AAA
     </div>
 
-    <img id="dialoguePortrait" src="images/character.png">
+    <div id="text">
+        Hey... can you hear me?
+    </div>
+
+    <img
+    id="dialoguePortrait"
+    src="images/character.png"
+    >
 
     <div id="dialogueHint">
-        Нажми, чтобы продолжить
+        Click to continue
     </div>
 
 </div>
 
-<!-- Музыка -->
-<audio id="bgMusic" src="music/circllelyy.mp3" loop></audio>
+
+<!-- Background music -->
+
+<audio
+id="bgMusic"
+src="music/circllelyy.mp3"
+loop>
+</audio>
 
 
 <script type="module">
@@ -210,23 +366,42 @@ import * as THREE from
 
 
 /* =========================
-   ОСНОВНЫЕ НАСТРОЙКИ
+   SCENE
 ========================= */
 
-const scene = new THREE.Scene();
+const scene =
+new THREE.Scene();
 
-scene.background = new THREE.Color(0x000000);
+scene.background =
+new THREE.Color(0x000000);
 
 
-const camera = new THREE.PerspectiveCamera(
+/* =========================
+   CAMERA
+========================= */
+
+const camera =
+new THREE.PerspectiveCamera(
     75,
-    window.innerWidth / window.innerHeight,
+    window.innerWidth /
+    window.innerHeight,
     0.1,
     100
 );
 
+camera.position.set(
+    0,
+    1.6,
+    5
+);
 
-const renderer = new THREE.WebGLRenderer({
+
+/* =========================
+   RENDERER
+========================= */
+
+const renderer =
+new THREE.WebGLRenderer({
     antialias: true
 });
 
@@ -236,92 +411,115 @@ renderer.setSize(
 );
 
 renderer.setPixelRatio(
-    Math.min(window.devicePixelRatio, 2)
+    Math.min(
+        window.devicePixelRatio,
+        2
+    )
 );
 
 document
-    .getElementById("game")
-    .appendChild(renderer.domElement);
+.getElementById("game")
+.appendChild(renderer.domElement);
 
 
 /* =========================
-   СВЕТ
+   LIGHT
 ========================= */
 
-const ambientLight = new THREE.AmbientLight(
+const light =
+new THREE.AmbientLight(
     0xffffff,
     1
 );
 
-scene.add(ambientLight);
+scene.add(light);
 
 
 /* =========================
-   ТЕКСТУРЫ
+   TEXTURES
 ========================= */
 
-const loader = new THREE.TextureLoader();
+const loader =
+new THREE.TextureLoader();
+
 
 const floorTexture =
-    loader.load("images/floor.png");
+loader.load(
+    "images/floor.png"
+);
+
 
 const wallTexture =
-    loader.load("images/wall.png");
+loader.load(
+    "images/wall.png"
+);
+
 
 const characterTexture =
-    loader.load("images/character.png");
+loader.load(
+    "images/character.png"
+);
 
 
 /* =========================
-   ПОЛ
+   FLOOR
 ========================= */
 
 const floorGeometry =
-    new THREE.PlaneGeometry(16, 16);
+new THREE.PlaneGeometry(
+    16,
+    16
+);
+
 
 const floorMaterial =
-    new THREE.MeshBasicMaterial({
-        map: floorTexture
-    });
+new THREE.MeshBasicMaterial({
+    map: floorTexture
+});
+
 
 const floor =
-    new THREE.Mesh(
-        floorGeometry,
-        floorMaterial
-    );
+new THREE.Mesh(
+    floorGeometry,
+    floorMaterial
+);
 
-floor.rotation.x = -Math.PI / 2;
+
+floor.rotation.x =
+-Math.PI / 2;
+
 
 floor.position.y = 0;
+
 
 scene.add(floor);
 
 
 /* =========================
-   СТЕНЫ
+   WALLS
 ========================= */
 
 const wallMaterial =
-    new THREE.MeshBasicMaterial({
-        map: wallTexture
-    });
+new THREE.MeshBasicMaterial({
+    map: wallTexture
+});
 
 
 const wallGeometry =
-    new THREE.BoxGeometry(
-        16,
-        5,
-        0.2
-    );
+new THREE.BoxGeometry(
+    16,
+    5,
+    0.2
+);
 
 
-/* Задняя стена */
+/* Back wall */
 
 const backWall =
-    new THREE.Mesh(
-        wallGeometry,
-        wallMaterial
-    );
+new THREE.Mesh(
+    wallGeometry,
+    wallMaterial
+);
 
 backWall.position.set(
     0,
@@ -332,13 +530,13 @@ backWall.position.set(
 scene.add(backWall);
 
 
-/* Передняя стена */
+/* Front wall */
 
 const frontWall =
-    new THREE.Mesh(
-        wallGeometry,
-        wallMaterial
-    );
+new THREE.Mesh(
+    wallGeometry,
+    wallMaterial
+);
 
 frontWall.position.set(
     0,
@@ -349,21 +547,21 @@ frontWall.position.set(
 scene.add(frontWall);
 
 
-/* Боковая стена */
+/* Left wall */
 
 const sideWallGeometry =
-    new THREE.BoxGeometry(
-        0.2,
-        5,
-        16
-    );
+new THREE.BoxGeometry(
+    0.2,
+    5,
+    16
+);
 
 
 const leftWall =
-    new THREE.Mesh(
-        sideWallGeometry,
-        wallMaterial
-    );
+new THREE.Mesh(
+    sideWallGeometry,
+    wallMaterial
+);
 
 leftWall.position.set(
     -8,
@@ -374,11 +572,13 @@ leftWall.position.set(
 scene.add(leftWall);
 
 
+/* Right wall */
+
 const rightWall =
-    new THREE.Mesh(
-        sideWallGeometry,
-        wallMaterial
-    );
+new THREE.Mesh(
+    sideWallGeometry,
+    wallMaterial
+);
 
 rightWall.position.set(
     8,
@@ -394,13 +594,21 @@ scene.add(rightWall);
 ========================= */
 
 const npcMaterial =
-    new THREE.SpriteMaterial({
-        map: characterTexture,
-        transparent: true
-    });
+new THREE.SpriteMaterial({
+
+    map:
+    characterTexture,
+
+    transparent: true
+
+});
+
 
 const npc =
-    new THREE.Sprite(npcMaterial);
+new THREE.Sprite(
+    npcMaterial
+);
+
 
 npc.position.set(
     0,
@@ -408,47 +616,59 @@ npc.position.set(
     -3
 );
 
+
 npc.scale.set(
     2.2,
     2.8,
     1
 );
 
+
 scene.add(npc);
 
 
 /* =========================
-   ИГРОК
+   PLAYER
 ========================= */
 
 const player = {
+
     x: 0,
+
     z: 5,
+
     speed: 0.08
+
 };
 
 
-camera.position.set(
-    player.x,
-    1.6,
-    player.z
-);
+/* =========================
+   CAMERA LOOK
+========================= */
+
+let yaw = 0;
+
+let pitch = 0;
+
+
+const maxPitch =
+Math.PI / 2.5;
 
 
 /* =========================
-   ДВИЖЕНИЕ
+   KEYBOARD
 ========================= */
 
 const keys = {};
 
 
-/* Клавиатура */
-
 window.addEventListener(
     "keydown",
-    (event) => {
+    event => {
 
-        keys[event.key.toLowerCase()] = true;
+        keys[
+            event.key.toLowerCase()
+        ] = true;
 
     }
 );
@@ -456,65 +676,55 @@ window.addEventListener(
 
 window.addEventListener(
     "keyup",
-    (event) => {
+    event => {
 
-        keys[event.key.toLowerCase()] = false;
+        keys[
+            event.key.toLowerCase()
+        ] = false;
 
     }
 );
 
 
 /* =========================
-   ЭКРАННЫЕ КНОПКИ
+   MOBILE CONTROLS
 ========================= */
 
 function buttonControl(
-    element,
+    id,
     key
 ) {
 
     const button =
-        document.getElementById(element);
+    document.getElementById(id);
 
 
     button.addEventListener(
-        "touchstart",
-        (event) => {
+        "pointerdown",
+        event => {
 
             event.preventDefault();
 
             keys[key] = true;
 
-        },
-        { passive: false }
+        }
     );
 
 
     button.addEventListener(
-        "touchend",
-        (event) => {
+        "pointerup",
+        event => {
 
             event.preventDefault();
 
             keys[key] = false;
 
-        },
-        { passive: false }
-    );
-
-
-    button.addEventListener(
-        "mousedown",
-        () => {
-
-            keys[key] = true;
-
         }
     );
 
 
     button.addEventListener(
-        "mouseup",
+        "pointercancel",
         () => {
 
             keys[key] = false;
@@ -524,64 +734,198 @@ function buttonControl(
 
 
     button.addEventListener(
-        "mouseleave",
+        "pointerleave",
         () => {
 
             keys[key] = false;
 
         }
     );
+
 }
 
 
-/*
-    ВАЖНО:
+buttonControl(
+    "up",
+    "w"
+);
 
-    ▲ = вперёд
-    ▼ = назад
-*/
 
-buttonControl("up", "w");
-buttonControl("down", "s");
+buttonControl(
+    "down",
+    "s"
+);
 
-buttonControl("left", "a");
-buttonControl("right", "d");
+
+buttonControl(
+    "left",
+    "a"
+);
+
+
+buttonControl(
+    "right",
+    "d"
+);
 
 
 /* =========================
-   ДИАЛОГ
+   TOUCH CAMERA
+========================= */
+
+let looking = false;
+
+let lastTouchX = 0;
+
+let lastTouchY = 0;
+
+
+renderer.domElement.addEventListener(
+    "pointerdown",
+    event => {
+
+        looking = true;
+
+        lastTouchX =
+        event.clientX;
+
+        lastTouchY =
+        event.clientY;
+
+        renderer.domElement
+        .setPointerCapture(
+            event.pointerId
+        );
+
+    }
+);
+
+
+renderer.domElement.addEventListener(
+    "pointermove",
+    event => {
+
+        if (!looking)
+            return;
+
+
+        const dx =
+        event.clientX -
+        lastTouchX;
+
+
+        const dy =
+        event.clientY -
+        lastTouchY;
+
+
+        lastTouchX =
+        event.clientX;
+
+
+        lastTouchY =
+        event.clientY;
+
+
+        yaw -=
+        dx * 0.004;
+
+
+        pitch -=
+        dy * 0.004;
+
+
+        pitch =
+        Math.max(
+            -maxPitch,
+            Math.min(
+                maxPitch,
+                pitch
+            )
+        );
+
+    }
+);
+
+
+renderer.domElement.addEventListener(
+    "pointerup",
+    event => {
+
+        looking = false;
+
+        try {
+
+            renderer.domElement
+            .releasePointerCapture(
+                event.pointerId
+            );
+
+        } catch(e) {}
+
+    }
+);
+
+
+renderer.domElement.addEventListener(
+    "pointercancel",
+    () => {
+
+        looking = false;
+
+    }
+);
+
+
+/* =========================
+   DIALOGUE
 ========================= */
 
 const dialogue =
-    document.getElementById("dialogue");
+document.getElementById(
+    "dialogue"
+);
+
 
 const speaker =
-    document.getElementById("speaker");
+document.getElementById(
+    "speaker"
+);
+
 
 const text =
-    document.getElementById("text");
+document.getElementById(
+    "text"
+);
 
-const dialoguePortrait =
-    document.getElementById(
-        "dialoguePortrait"
-    );
+
+const interactHint =
+document.getElementById(
+    "interactHint"
+);
 
 
 const dialogueLines = [
 
     {
         speaker: "AAA",
-        text: "ААААААА"
+
+        text:
+        "AAAAAAA"
     },
 
     {
         speaker: "AAA",
-        text: "Эй... ты меня слышишь?"
+
+        text:
+        "Hey... can you hear me?"
     },
 
     {
         speaker: "AAA",
-        text: "Наконец-то ты пришёл."
+
+        text:
+        "Finally, you came."
     }
 
 ];
@@ -592,96 +936,160 @@ let dialogueIndex = 0;
 let inDialogue = false;
 
 
-/* Показать диалог */
+/* =========================
+   START DIALOGUE
+========================= */
 
 function startDialogue() {
 
-    if (inDialogue) return;
+    if (inDialogue)
+        return;
+
 
     inDialogue = true;
 
+
     dialogueIndex = 0;
 
-    dialogue.style.display = "block";
+
+    interactHint.style.display =
+    "none";
+
+
+    dialogue.style.display =
+    "block";
+
 
     showDialogueLine();
 
 }
 
 
-/* Следующая реплика */
+/* =========================
+   SHOW LINE
+========================= */
 
 function showDialogueLine() {
 
     const line =
-        dialogueLines[dialogueIndex];
+    dialogueLines[
+        dialogueIndex
+    ];
 
 
     speaker.textContent =
-        line.speaker;
+    line.speaker;
+
 
     text.textContent =
-        line.text;
+    line.text;
 
 }
 
 
-/* Нажатие на диалог */
+/* =========================
+   NEXT LINE
+========================= */
+
+function nextDialogue() {
+
+    if (!inDialogue)
+        return;
+
+
+    dialogueIndex++;
+
+
+    if (
+        dialogueIndex >=
+        dialogueLines.length
+    ) {
+
+        dialogue.style.display =
+        "none";
+
+
+        inDialogue = false;
+
+
+        dialogueIndex = 0;
+
+
+        return;
+
+    }
+
+
+    showDialogueLine();
+
+}
+
 
 dialogue.addEventListener(
-    "click",
-    () => {
+    "pointerdown",
+    event => {
 
-        dialogueIndex++;
+        event.preventDefault();
 
-
-        if (
-            dialogueIndex >=
-            dialogueLines.length
-        ) {
-
-            dialogue.style.display =
-                "none";
-
-            inDialogue = false;
-
-            dialogueIndex = 0;
-
-            return;
-        }
-
-
-        showDialogueLine();
+        nextDialogue();
 
     }
 );
 
 
 /* =========================
-   ПРОВЕРКА NPC
+   NPC DISTANCE
 ========================= */
 
-function checkNPC() {
+function getNPCDistance() {
 
     const dx =
-        player.x - npc.position.x;
+    player.x -
+    npc.position.x;
+
 
     const dz =
-        player.z - npc.position.z;
+    player.z -
+    npc.position.z;
+
+
+    return Math.sqrt(
+        dx * dx +
+        dz * dz
+    );
+
+}
+
+
+/* =========================
+   INTERACTION HINT
+========================= */
+
+function updateInteraction() {
+
+    if (inDialogue) {
+
+        interactHint.style.display =
+        "none";
+
+        return;
+
+    }
+
 
     const distance =
-        Math.sqrt(
-            dx * dx +
-            dz * dz
-        );
+    getNPCDistance();
 
 
-    if (
-        distance < 2.5 &&
-        !inDialogue
-    ) {
+    if (distance < 2.7) {
 
-        startDialogue();
+        interactHint.style.display =
+        "block";
+
+    } else {
+
+        interactHint.style.display =
+        "none";
 
     }
 
@@ -689,13 +1097,38 @@ function checkNPC() {
 
 
 /* =========================
-   МУЗЫКА
+   CLICK NPC
+========================= */
+
+renderer.domElement.addEventListener(
+    "click",
+    event => {
+
+        if (inDialogue)
+            return;
+
+
+        if (
+            getNPCDistance() <
+            2.7
+        ) {
+
+            startDialogue();
+
+        }
+
+    }
+);
+
+
+/* =========================
+   MUSIC
 ========================= */
 
 const bgMusic =
-    document.getElementById(
-        "bgMusic"
-    );
+document.getElementById(
+    "bgMusic"
+);
 
 
 bgMusic.volume = 0.5;
@@ -704,35 +1137,174 @@ bgMusic.volume = 0.5;
 function startMusic() {
 
     bgMusic
-        .play()
-        .catch(() => {});
+    .play()
+    .catch(() => {});
 
 }
 
 
-/*
-   Телефоны блокируют
-   автоматический запуск музыки,
-   поэтому запускаем её
-   после первого касания.
-*/
-
 document.addEventListener(
-    "touchstart",
-    startMusic,
-    { once: true }
-);
-
-
-document.addEventListener(
-    "click",
+    "pointerdown",
     startMusic,
     { once: true }
 );
 
 
 /* =========================
-   ИГРОВОЙ ЦИКЛ
+   UPDATE CAMERA
+========================= */
+
+function updateCamera() {
+
+    camera.position.x =
+    player.x;
+
+
+    camera.position.y =
+    1.6;
+
+
+    camera.position.z =
+    player.z;
+
+
+    camera.rotation.order =
+    "YXZ";
+
+
+    camera.rotation.y =
+    yaw;
+
+
+    camera.rotation.x =
+    pitch;
+
+}
+
+
+/* =========================
+   MOVEMENT
+========================= */
+
+function updateMovement() {
+
+    if (inDialogue)
+        return;
+
+
+    let forward = 0;
+
+    let right = 0;
+
+
+    /* Forward */
+
+    if (
+        keys["w"] ||
+        keys["arrowup"]
+    ) {
+
+        forward += 1;
+
+    }
+
+
+    /* Backward */
+
+    if (
+        keys["s"] ||
+        keys["arrowdown"]
+    ) {
+
+        forward -= 1;
+
+    }
+
+
+    /* Left */
+
+    if (
+        keys["a"] ||
+        keys["arrowleft"]
+    ) {
+
+        right -= 1;
+
+    }
+
+
+    /* Right */
+
+    if (
+        keys["d"] ||
+        keys["arrowright"]
+    ) {
+
+        right += 1;
+
+    }
+
+
+    /* Camera direction */
+
+    const forwardX =
+    -Math.sin(yaw);
+
+
+    const forwardZ =
+    -Math.cos(yaw);
+
+
+    const rightX =
+    Math.cos(yaw);
+
+
+    const rightZ =
+    -Math.sin(yaw);
+
+
+    player.x +=
+    (
+        forwardX * forward +
+        rightX * right
+    )
+    * player.speed;
+
+
+    player.z +=
+    (
+        forwardZ * forward +
+        rightZ * right
+    )
+    * player.speed;
+
+
+    /* Room boundaries */
+
+    player.x =
+    Math.max(
+        -7.5,
+        Math.min(
+            7.5,
+            player.x
+        )
+    );
+
+
+    player.z =
+    Math.max(
+        -7.5,
+        Math.min(
+            7.5,
+            player.z
+        )
+    );
+
+}
+
+
+/* =========================
+   GAME LOOP
 ========================= */
 
 function animate() {
@@ -742,100 +1314,11 @@ function animate() {
     );
 
 
-    if (!inDialogue) {
+    updateMovement();
 
-        /*
-           ВПЕРЁД
-        */
+    updateCamera();
 
-        if (
-            keys["w"] ||
-            keys["arrowup"]
-        ) {
-
-            player.z -=
-                player.speed;
-
-        }
-
-
-        /*
-           НАЗАД
-        */
-
-        if (
-            keys["s"] ||
-            keys["arrowdown"]
-        ) {
-
-            player.z +=
-                player.speed;
-
-        }
-
-
-        /*
-           ВЛЕВО
-        */
-
-        if (
-            keys["a"] ||
-            keys["arrowleft"]
-        ) {
-
-            player.x -=
-                player.speed;
-
-        }
-
-
-        /*
-           ВПРАВО
-        */
-
-        if (
-            keys["d"] ||
-            keys["arrowright"]
-        ) {
-
-            player.x +=
-                player.speed;
-
-        }
-
-
-        /* Границы комнаты */
-
-        player.x =
-            Math.max(
-                -7.5,
-                Math.min(
-                    7.5,
-                    player.x
-                )
-            );
-
-
-        player.z =
-            Math.max(
-                -7.5,
-                Math.min(
-                    7.5,
-                    player.z
-                )
-            );
-
-
-        camera.position.x =
-            player.x;
-
-        camera.position.z =
-            player.z;
-
-
-        checkNPC();
-
-    }
+    updateInteraction();
 
 
     renderer.render(
@@ -850,7 +1333,7 @@ animate();
 
 
 /* =========================
-   ИЗМЕНЕНИЕ РАЗМЕРА ОКНА
+   RESIZE
 ========================= */
 
 window.addEventListener(
@@ -858,10 +1341,12 @@ window.addEventListener(
     () => {
 
         camera.aspect =
-            window.innerWidth /
-            window.innerHeight;
+        window.innerWidth /
+        window.innerHeight;
+
 
         camera.updateProjectionMatrix();
+
 
         renderer.setSize(
             window.innerWidth,
