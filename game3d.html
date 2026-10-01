@@ -1,0 +1,1246 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<title>3D Game</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #000;
+        font-family: Arial, sans-serif;
+        touch-action: none;
+    }
+
+    #game {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    canvas {
+        display: block;
+        width: 100%;
+        height: 100%;
+    }
+
+    /* -------------------------
+       КНОПКИ УПРАВЛЕНИЯ
+       ------------------------- */
+
+    #controls {
+        position: fixed;
+        left: 15px;
+        bottom: 20px;
+
+        width: 180px;
+        height: 130px;
+
+        z-index: 10;
+
+        user-select: none;
+        pointer-events: none;
+    }
+
+    .control {
+        position: absolute;
+
+        width: 55px;
+        height: 55px;
+
+        border: 2px solid rgba(255,255,255,0.65);
+        background: rgba(0,0,0,0.35);
+
+        color: white;
+        font-size: 25px;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        border-radius: 8px;
+
+        pointer-events: auto;
+    }
+
+    .control:active {
+        background: rgba(255,255,255,0.25);
+    }
+
+    #forward {
+        left: 62px;
+        top: 0;
+    }
+
+    #back {
+        left: 62px;
+        top: 65px;
+    }
+
+    #left {
+        left: 0;
+        top: 65px;
+    }
+
+    #right {
+        left: 124px;
+        top: 65px;
+    }
+
+    /* -------------------------
+       ПОДСКАЗКА
+       ------------------------- */
+
+    #hint {
+        position: fixed;
+
+        left: 50%;
+        bottom: 25px;
+
+        transform: translateX(-50%);
+
+        color: white;
+
+        background: rgba(0,0,0,0.55);
+
+        padding: 8px 14px;
+
+        border-radius: 5px;
+
+        font-size: 14px;
+
+        opacity: 0;
+
+        transition: opacity 0.2s;
+
+        pointer-events: none;
+
+        z-index: 20;
+    }
+
+    #hint.show {
+        opacity: 1;
+    }
+
+    /* -------------------------
+       ДИАЛОГ
+       ------------------------- */
+
+    #dialog {
+        position: fixed;
+
+        left: 3%;
+        right: 3%;
+        bottom: 3%;
+
+        min-height: 190px;
+
+        background: rgba(245,245,245,0.97);
+
+        border: 4px solid #111;
+
+        z-index: 30;
+
+        display: none;
+
+        padding: 20px;
+
+        color: #111;
+    }
+
+    #dialogPortrait {
+        position: absolute;
+
+        right: 15px;
+        bottom: 15px;
+
+        width: 150px;
+        height: 150px;
+
+        object-fit: contain;
+    }
+
+    #dialogText {
+        width: calc(100% - 175px);
+
+        padding-right: 10px;
+    }
+
+    #dialogName {
+        font-size: 22px;
+        font-weight: bold;
+
+        margin-bottom: 12px;
+    }
+
+    #dialogLine {
+        font-size: 20px;
+        line-height: 1.35;
+    }
+
+    #dialogContinue {
+        position: absolute;
+
+        right: 15px;
+        bottom: 8px;
+
+        font-size: 12px;
+        opacity: 0.6;
+    }
+
+    /* -------------------------
+       ИКОНКА ИГРОКА
+       ------------------------- */
+
+    #playerIcon {
+        position: fixed;
+
+        right: 15px;
+        top: 15px;
+
+        width: 65px;
+        height: 65px;
+
+        object-fit: contain;
+
+        z-index: 20;
+
+        pointer-events: none;
+    }
+
+    @media (max-width: 600px) {
+
+        #dialog {
+            min-height: 160px;
+            padding: 14px;
+        }
+
+        #dialogPortrait {
+            width: 105px;
+            height: 105px;
+            right: 10px;
+            bottom: 10px;
+        }
+
+        #dialogText {
+            width: calc(100% - 120px);
+        }
+
+        #dialogName {
+            font-size: 17px;
+        }
+
+        #dialogLine {
+            font-size: 16px;
+        }
+
+        #dialogContinue {
+            font-size: 10px;
+        }
+
+        #playerIcon {
+            width: 50px;
+            height: 50px;
+        }
+    }
+</style>
+</head>
+
+
+<body>
+
+<div id="game"></div>
+
+<!-- Иконка персонажа игрока -->
+<img id="playerIcon" src="images/player.png">
+
+
+<!-- Управление -->
+<div id="controls">
+
+    <div class="control" id="forward">▲</div>
+    <div class="control" id="back">▼</div>
+    <div class="control" id="left">◀</div>
+    <div class="control" id="right">▶</div>
+
+</div>
+
+
+<!-- Подсказка -->
+<div id="hint">
+    Подойди ближе...
+</div>
+
+
+<!-- Диалог -->
+<div id="dialog">
+
+    <div id="dialogText">
+
+        <div id="dialogName">
+            AAA
+        </div>
+
+        <div id="dialogLine">
+            ...
+        </div>
+
+    </div>
+
+    <img id="dialogPortrait" src="images/character.png">
+
+    <div id="dialogContinue">
+        Нажмите, чтобы продолжить
+    </div>
+
+</div>
+
+
+<script type="module">
+
+import * as THREE from
+"https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js";
+
+
+/* =====================================================
+   НАСТРОЙКИ
+   ===================================================== */
+
+const ROOM_WIDTH = 16;
+const ROOM_DEPTH = 16;
+
+const WALL_HEIGHT = 4;
+
+const PLAYER_SPEED = 0.08;
+
+const ROTATION_SPEED = 0.045;
+
+const CHARACTER_DISTANCE = 2.5;
+
+
+/* =====================================================
+   СЦЕНА
+   ===================================================== */
+
+const scene = new THREE.Scene();
+
+scene.background = new THREE.Color(0x777777);
+
+
+/* =====================================================
+   КАМЕРА
+   ===================================================== */
+
+const camera = new THREE.PerspectiveCamera(
+    70,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    100
+);
+
+camera.position.set(
+    0,
+    1.65,
+    5
+);
+
+
+/* =====================================================
+   РЕНДЕР
+   ===================================================== */
+
+const renderer = new THREE.WebGLRenderer({
+    antialias: false
+});
+
+renderer.setSize(
+    window.innerWidth,
+    window.innerHeight
+);
+
+renderer.setPixelRatio(
+    Math.min(window.devicePixelRatio, 1.5)
+);
+
+document
+    .getElementById("game")
+    .appendChild(renderer.domElement);
+
+
+/* =====================================================
+   СВЕТ
+   ===================================================== */
+
+const ambientLight =
+    new THREE.AmbientLight(
+        0xffffff,
+        1.5
+    );
+
+scene.add(ambientLight);
+
+
+/* =====================================================
+   ЗАГРУЗКА ТЕКСТУР
+   ===================================================== */
+
+const textureLoader =
+    new THREE.TextureLoader();
+
+
+const floorTexture =
+    textureLoader.load(
+        "images/floor.png"
+    );
+
+
+const wallTexture =
+    textureLoader.load(
+        "images/wall.png"
+    );
+
+
+floorTexture.wrapS =
+    THREE.RepeatWrapping;
+
+floorTexture.wrapT =
+    THREE.RepeatWrapping;
+
+floorTexture.repeat.set(
+    8,
+    8
+);
+
+
+wallTexture.wrapS =
+    THREE.RepeatWrapping;
+
+wallTexture.wrapT =
+    THREE.RepeatWrapping;
+
+wallTexture.repeat.set(
+    4,
+    1
+);
+
+
+/* =====================================================
+   ПОЛ
+   ===================================================== */
+
+const floorGeometry =
+    new THREE.PlaneGeometry(
+        ROOM_WIDTH,
+        ROOM_DEPTH
+    );
+
+
+const floorMaterial =
+    new THREE.MeshBasicMaterial({
+        map: floorTexture
+    });
+
+
+const floor =
+    new THREE.Mesh(
+        floorGeometry,
+        floorMaterial
+    );
+
+
+floor.rotation.x =
+    -Math.PI / 2;
+
+
+floor.position.y = 0;
+
+scene.add(floor);
+
+
+/* =====================================================
+   СТЕНЫ
+   ===================================================== */
+
+function createWall(
+    x,
+    z,
+    width,
+    depth
+) {
+
+    const geometry =
+        new THREE.BoxGeometry(
+            width,
+            WALL_HEIGHT,
+            depth
+        );
+
+    const material =
+        new THREE.MeshBasicMaterial({
+            map: wallTexture
+        });
+
+    const wall =
+        new THREE.Mesh(
+            geometry,
+            material
+        );
+
+    wall.position.set(
+        x,
+        WALL_HEIGHT / 2,
+        z
+    );
+
+    scene.add(wall);
+
+    return wall;
+}
+
+
+/* Верхняя стена */
+createWall(
+    0,
+    -ROOM_DEPTH / 2,
+    ROOM_WIDTH,
+    0.3
+);
+
+
+/* Нижняя стена */
+createWall(
+    0,
+    ROOM_DEPTH / 2,
+    ROOM_WIDTH,
+    0.3
+);
+
+
+/* Левая стена */
+createWall(
+    -ROOM_WIDTH / 2,
+    0,
+    0.3,
+    ROOM_DEPTH
+);
+
+
+/* Правая стена */
+createWall(
+    ROOM_WIDTH / 2,
+    0,
+    0.3,
+    ROOM_DEPTH
+);
+
+
+/* =====================================================
+   ПЕРСОНАЖ
+   ===================================================== */
+
+const characterTexture =
+    textureLoader.load(
+        "images/character.png"
+    );
+
+
+const characterMaterial =
+    new THREE.SpriteMaterial({
+        map: characterTexture,
+        transparent: true
+    });
+
+
+const character =
+    new THREE.Sprite(
+        characterMaterial
+    );
+
+
+character.position.set(
+    0,
+    1.4,
+    -3
+);
+
+
+/*
+   Размер персонажа.
+   Потом можно изменить.
+*/
+
+character.scale.set(
+    2.2,
+    2.8,
+    1
+);
+
+
+scene.add(character);
+
+
+/* =====================================================
+   ПЕРЕМЕННЫЕ ИГРОКА
+   ===================================================== */
+
+const player = {
+
+    x: 0,
+
+    z: 5,
+
+    rotation: 0
+
+};
+
+
+/* =====================================================
+   УПРАВЛЕНИЕ
+   ===================================================== */
+
+const keys = {
+
+    forward: false,
+
+    back: false,
+
+    left: false,
+
+    right: false
+
+};
+
+
+function setupButton(
+    id,
+    key
+) {
+
+    const button =
+        document.getElementById(id);
+
+
+    button.addEventListener(
+        "touchstart",
+        function(e) {
+
+            e.preventDefault();
+
+            keys[key] = true;
+
+        },
+        {
+            passive: false
+        }
+    );
+
+
+    button.addEventListener(
+        "touchend",
+        function(e) {
+
+            e.preventDefault();
+
+            keys[key] = false;
+
+        },
+        {
+            passive: false
+        }
+    );
+
+
+    button.addEventListener(
+        "touchcancel",
+        function() {
+
+            keys[key] = false;
+
+        }
+    );
+
+
+    /*
+       Чтобы работало и с мышкой,
+       например при тестировании
+       на компьютере.
+    */
+
+    button.addEventListener(
+        "mousedown",
+        function() {
+
+            keys[key] = true;
+
+        }
+    );
+
+
+    button.addEventListener(
+        "mouseup",
+        function() {
+
+            keys[key] = false;
+
+        }
+    );
+
+
+    button.addEventListener(
+        "mouseleave",
+        function() {
+
+            keys[key] = false;
+
+        }
+    );
+
+}
+
+
+setupButton(
+    "forward",
+    "forward"
+);
+
+setupButton(
+    "back",
+    "back"
+);
+
+setupButton(
+    "left",
+    "left"
+);
+
+setupButton(
+    "right",
+    "right"
+);
+
+
+/* =====================================================
+   КЛАВИАТУРА
+   ===================================================== */
+
+window.addEventListener(
+    "keydown",
+    function(e) {
+
+        if (e.key === "w" ||
+            e.key === "ArrowUp") {
+
+            keys.forward = true;
+
+        }
+
+        if (e.key === "s" ||
+            e.key === "ArrowDown") {
+
+            keys.back = true;
+
+        }
+
+        if (e.key === "a" ||
+            e.key === "ArrowLeft") {
+
+            keys.left = true;
+
+        }
+
+        if (e.key === "d" ||
+            e.key === "ArrowRight") {
+
+            keys.right = true;
+
+        }
+
+    }
+);
+
+
+window.addEventListener(
+    "keyup",
+    function(e) {
+
+        if (e.key === "w" ||
+            e.key === "ArrowUp") {
+
+            keys.forward = false;
+
+        }
+
+        if (e.key === "s" ||
+            e.key === "ArrowDown") {
+
+            keys.back = false;
+
+        }
+
+        if (e.key === "a" ||
+            e.key === "ArrowLeft") {
+
+            keys.left = false;
+
+        }
+
+        if (e.key === "d" ||
+            e.key === "ArrowRight") {
+
+            keys.right = false;
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   ДИАЛОГ
+   ===================================================== */
+
+const dialog =
+    document.getElementById(
+        "dialog"
+    );
+
+
+const dialogName =
+    document.getElementById(
+        "dialogName"
+    );
+
+
+const dialogLine =
+    document.getElementById(
+        "dialogLine"
+    );
+
+
+const dialogPortrait =
+    document.getElementById(
+        "dialogPortrait"
+    );
+
+
+const hint =
+    document.getElementById(
+        "hint"
+    );
+
+
+let dialogueActive = false;
+
+let dialogueIndex = 0;
+
+
+const dialogue = [
+
+    {
+        name: "AAA",
+
+        text: "ААААААА"
+    },
+
+    {
+        name: "AAA",
+
+        text: "Эй... ты меня слышишь?"
+    },
+
+    {
+        name: "AAA",
+
+        text: "Наконец-то ты пришёл."
+    }
+
+];
+
+
+/* =====================================================
+   НАЧАТЬ ДИАЛОГ
+   ===================================================== */
+
+function startDialogue() {
+
+    dialogueActive = true;
+
+    dialogueIndex = 0;
+
+    showDialogueLine();
+
+}
+
+
+/* =====================================================
+   ПОКАЗАТЬ РЕПЛИКУ
+   ===================================================== */
+
+function showDialogueLine() {
+
+    const line =
+        dialogue[
+            dialogueIndex
+        ];
+
+
+    dialogName.textContent =
+        line.name;
+
+
+    dialogLine.textContent =
+        line.text;
+
+
+    dialogPortrait.src =
+        "images/character.png";
+
+
+    dialog.style.display =
+        "block";
+
+}
+
+
+/* =====================================================
+   СЛЕДУЮЩАЯ РЕПЛИКА
+   ===================================================== */
+
+function nextDialogue() {
+
+    if (!dialogueActive) {
+
+        return;
+
+    }
+
+
+    dialogueIndex++;
+
+
+    if (
+        dialogueIndex >=
+        dialogue.length
+    ) {
+
+        closeDialogue();
+
+        return;
+
+    }
+
+
+    showDialogueLine();
+
+}
+
+
+/* =====================================================
+   ЗАКРЫТЬ ДИАЛОГ
+   ===================================================== */
+
+function closeDialogue() {
+
+    dialogueActive = false;
+
+    dialog.style.display =
+        "none";
+
+}
+
+
+/* Нажатие на диалог */
+
+dialog.addEventListener(
+    "click",
+    function() {
+
+        nextDialogue();
+
+    }
+);
+
+
+/* =====================================================
+   ПРОВЕРКА РАССТОЯНИЯ
+   ===================================================== */
+
+function checkCharacterDistance() {
+
+    const dx =
+        player.x -
+        character.position.x;
+
+
+    const dz =
+        player.z -
+        character.position.z;
+
+
+    const distance =
+        Math.sqrt(
+            dx * dx +
+            dz * dz
+        );
+
+
+    if (
+        distance <
+        CHARACTER_DISTANCE
+    ) {
+
+        if (!dialogueActive) {
+
+            hint.textContent =
+                "Нажми на персонажа, чтобы поговорить";
+
+            hint.classList.add(
+                "show"
+            );
+
+        }
+
+        return true;
+
+    }
+
+
+    hint.classList.remove(
+        "show"
+    );
+
+
+    return false;
+
+}
+
+
+/* =====================================================
+   НАЖАТИЕ НА ЭКРАН
+   ===================================================== */
+
+renderer.domElement.addEventListener(
+    "click",
+    function() {
+
+        if (dialogueActive) {
+
+            nextDialogue();
+
+            return;
+
+        }
+
+
+        if (
+            checkCharacterDistance()
+        ) {
+
+            startDialogue();
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   ДВИЖЕНИЕ
+   ===================================================== */
+
+function updatePlayer() {
+
+    if (dialogueActive) {
+
+        return;
+
+    }
+
+
+    /* Поворот */
+
+    if (keys.left) {
+
+        player.rotation +=
+            ROTATION_SPEED;
+
+    }
+
+
+    if (keys.right) {
+
+        player.rotation -=
+            ROTATION_SPEED;
+
+    }
+
+
+    /* Направление взгляда */
+
+    const directionX =
+        Math.sin(
+            player.rotation
+        );
+
+
+    const directionZ =
+        Math.cos(
+            player.rotation
+        );
+
+
+    /* Движение вперёд */
+
+    if (keys.forward) {
+
+        player.x +=
+            directionX *
+            PLAYER_SPEED;
+
+        player.z +=
+            directionZ *
+            PLAYER_SPEED;
+
+    }
+
+
+    /* Движение назад */
+
+    if (keys.back) {
+
+        player.x -=
+            directionX *
+            PLAYER_SPEED;
+
+        player.z -=
+            directionZ *
+            PLAYER_SPEED;
+
+    }
+
+
+    /* ---------------------------------
+       СТЕНЫ
+       --------------------------------- */
+
+    const limitX =
+        ROOM_WIDTH / 2 - 0.6;
+
+
+    const limitZ =
+        ROOM_DEPTH / 2 - 0.6;
+
+
+    player.x =
+        Math.max(
+            -limitX,
+            Math.min(
+                limitX,
+                player.x
+            )
+        );
+
+
+    player.z =
+        Math.max(
+            -limitZ,
+            Math.min(
+                limitZ,
+                player.z
+            )
+        );
+
+
+    /* ---------------------------------
+       КАМЕРА
+       --------------------------------- */
+
+    camera.position.x =
+        player.x;
+
+
+    camera.position.y =
+        1.65;
+
+
+    camera.position.z =
+        player.z;
+
+
+    camera.rotation.y =
+        player.rotation;
+
+
+    camera.rotation.x = 0;
+
+}
+
+
+/* =====================================================
+   АНИМАЦИЯ
+   ===================================================== */
+
+function animate() {
+
+    requestAnimationFrame(
+        animate
+    );
+
+
+    updatePlayer();
+
+
+    checkCharacterDistance();
+
+
+    renderer.render(
+        scene,
+        camera
+    );
+
+}
+
+
+animate();
+
+
+/* =====================================================
+   ИЗМЕНЕНИЕ РАЗМЕРА ЭКРАНА
+   ===================================================== */
+
+window.addEventListener(
+    "resize",
+    function() {
+
+        camera.aspect =
+            window.innerWidth /
+            window.innerHeight;
+
+
+        camera.updateProjectionMatrix();
+
+
+        renderer.setSize(
+            window.innerWidth,
+            window.innerHeight
+        );
+
+    }
+);
+
+</script>
+
+</body>
+</html>
