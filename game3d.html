@@ -1,58 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 <meta charset="UTF-8">
 
-<meta name="viewport"
-content="width=device-width,
-initial-scale=1.0,
-maximum-scale=1.0,
-user-scalable=no">
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+>
 
 <title>Circle</title>
 
 <style>
-
 * {
     box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
     margin: 0;
     padding: 0;
-
     width: 100%;
     height: 100%;
-
     overflow: hidden;
-
     background: black;
-
     font-family: Arial, sans-serif;
-
     touch-action: none;
 }
 
 #game {
     position: fixed;
-
-    left: 0;
-    top: 0;
-
+    inset: 0;
     width: 100%;
     height: 100%;
 }
 
-
 /* =========================
-   PLAYER PORTRAIT
+   PLAYER EMOTION ICON
 ========================= */
 
 #playerIcon {
-
     position: fixed;
-
     top: 0;
     right: 0;
 
@@ -62,17 +49,14 @@ html, body {
     object-fit: contain;
 
     z-index: 10;
-
     pointer-events: none;
 }
 
-
 /* =========================
-   CONTROLS
+   MOVEMENT BUTTONS
 ========================= */
 
 #controls {
-
     position: fixed;
 
     left: 20px;
@@ -84,19 +68,16 @@ html, body {
     z-index: 40;
 }
 
-
 .control {
-
     position: absolute;
 
     width: 55px;
     height: 55px;
 
     border: 2px solid white;
-
     border-radius: 10px;
 
-    background: rgba(0,0,0,0.55);
+    background: rgba(0, 0, 0, 0.55);
 
     color: white;
 
@@ -104,7 +85,6 @@ html, body {
     font-weight: bold;
 
     display: flex;
-
     justify-content: center;
     align-items: center;
 
@@ -114,66 +94,47 @@ html, body {
     touch-action: none;
 }
 
-
 .control:active {
-
-    background:
-    rgba(255,255,255,0.3);
+    background: rgba(255, 255, 255, 0.3);
 }
 
-
 #up {
-
     left: 62px;
     top: 0;
 }
 
-
 #down {
-
     left: 62px;
     bottom: 0;
 }
 
-
 #left {
-
     left: 0;
     top: 62px;
 }
 
-
 #right {
-
     right: 0;
     top: 62px;
 }
 
-
 /* =========================
-   NPC INTERACTION HINT
+   INTERACTION HINT
 ========================= */
 
 #interactHint {
-
     position: fixed;
 
     left: 50%;
-
     bottom: 32%;
 
-    transform:
-    translateX(-50%);
+    transform: translateX(-50%);
 
-    padding:
-    10px 18px;
+    padding: 10px 18px;
 
-    background:
-    rgba(0,0,0,0.75);
+    background: rgba(0, 0, 0, 0.75);
 
-    border:
-    2px solid white;
-
+    border: 2px solid white;
     border-radius: 8px;
 
     color: white;
@@ -189,27 +150,22 @@ html, body {
     white-space: nowrap;
 }
 
-
 /* =========================
    DIALOGUE
 ========================= */
 
 #dialogue {
-
     position: fixed;
 
     left: 0;
     bottom: 0;
 
     width: 100%;
-
     height: 30%;
 
-    background:
-    rgba(0,0,0,0.9);
+    background: rgba(0, 0, 0, 0.9);
 
-    border-top:
-    3px solid white;
+    border-top: 3px solid white;
 
     color: white;
 
@@ -220,32 +176,25 @@ html, body {
     padding: 20px;
 
     cursor: pointer;
+
+    touch-action: manipulation;
 }
 
-
 #speaker {
-
     font-size: 24px;
-
     font-weight: bold;
 
     margin-bottom: 10px;
 }
 
-
 #text {
-
     font-size: 20px;
-
     line-height: 1.4;
 
-    width:
-    calc(100% - 220px);
+    width: calc(100% - 220px);
 }
 
-
 #dialoguePortrait {
-
     position: absolute;
 
     right: 25px;
@@ -257,9 +206,7 @@ html, body {
     object-fit: contain;
 }
 
-
 #dialogueHint {
-
     position: absolute;
 
     right: 20px;
@@ -269,64 +216,66 @@ html, body {
 
     opacity: 0.6;
 }
-
 </style>
 </head>
 
-
 <body>
 
+<!-- =========================
+     3D GAME
+========================= -->
 
 <div id="game"></div>
 
 
-<!-- Player portrait -->
+<!-- =========================
+     PLAYER ICON
+========================= -->
 
 <img
-id="playerIcon"
-src="images/player.png"
+    id="playerIcon"
+    src="images/player.png"
+    alt="Player"
 >
 
 
-<!-- Interaction hint -->
+<!-- =========================
+     NPC INTERACTION HINT
+========================= -->
 
 <div id="interactHint">
     Click the character to talk
 </div>
 
 
-<!-- Controls -->
+<!-- =========================
+     MOVEMENT CONTROLS
+========================= -->
 
 <div id="controls">
 
-    <div
-    class="control"
-    id="up">
+    <div class="control" id="up">
         ▲
     </div>
 
-    <div
-    class="control"
-    id="down">
+    <div class="control" id="down">
         ▼
     </div>
 
-    <div
-    class="control"
-    id="left">
+    <div class="control" id="left">
         ◀
     </div>
 
-    <div
-    class="control"
-    id="right">
+    <div class="control" id="right">
         ▶
     </div>
 
 </div>
 
 
-<!-- Dialogue -->
+<!-- =========================
+     DIALOGUE BOX
+========================= -->
 
 <div id="dialogue">
 
@@ -335,12 +284,13 @@ src="images/player.png"
     </div>
 
     <div id="text">
-        Hey... can you hear me?
+        AAAAAAA
     </div>
 
     <img
-    id="dialoguePortrait"
-    src="images/character.png"
+        id="dialoguePortrait"
+        src="images/character.png"
+        alt="Character"
     >
 
     <div id="dialogueHint">
@@ -350,13 +300,16 @@ src="images/player.png"
 </div>
 
 
-<!-- Background music -->
+<!-- =========================
+     MUSIC
+========================= -->
 
 <audio
-id="bgMusic"
-src="music/circllelyy.mp3"
-loop>
-</audio>
+    id="bgMusic"
+    src="music/circllelyy.mp3"
+    loop
+    preload="auto"
+></audio>
 
 
 <script type="module">
@@ -365,26 +318,22 @@ import * as THREE from
 "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js";
 
 
-/* =========================
+/* =========================================================
    SCENE
-========================= */
+========================================================= */
 
-const scene =
-new THREE.Scene();
+const scene = new THREE.Scene();
 
-scene.background =
-new THREE.Color(0x000000);
+scene.background = new THREE.Color(0x000000);
 
 
-/* =========================
+/* =========================================================
    CAMERA
-========================= */
+========================================================= */
 
-const camera =
-new THREE.PerspectiveCamera(
+const camera = new THREE.PerspectiveCamera(
     75,
-    window.innerWidth /
-    window.innerHeight,
+    window.innerWidth / window.innerHeight,
     0.1,
     100
 );
@@ -395,13 +344,14 @@ camera.position.set(
     5
 );
 
+camera.rotation.order = "YXZ";
 
-/* =========================
+
+/* =========================================================
    RENDERER
-========================= */
+========================================================= */
 
-const renderer =
-new THREE.WebGLRenderer({
+const renderer = new THREE.WebGLRenderer({
     antialias: true
 });
 
@@ -411,115 +361,90 @@ renderer.setSize(
 );
 
 renderer.setPixelRatio(
-    Math.min(
-        window.devicePixelRatio,
-        2
-    )
+    Math.min(window.devicePixelRatio, 2)
 );
 
 document
-.getElementById("game")
-.appendChild(renderer.domElement);
+    .getElementById("game")
+    .appendChild(renderer.domElement);
 
 
-/* =========================
+/* =========================================================
    LIGHT
-========================= */
+========================================================= */
 
-const light =
-new THREE.AmbientLight(
-    0xffffff,
-    1
+scene.add(
+    new THREE.AmbientLight(
+        0xffffff,
+        1
+    )
 );
 
-scene.add(light);
 
-
-/* =========================
+/* =========================================================
    TEXTURES
-========================= */
+========================================================= */
 
-const loader =
-new THREE.TextureLoader();
-
+const loader = new THREE.TextureLoader();
 
 const floorTexture =
-loader.load(
-    "images/floor.png"
-);
-
+    loader.load("images/floor.png");
 
 const wallTexture =
-loader.load(
-    "images/wall.png"
-);
-
+    loader.load("images/wall.png");
 
 const characterTexture =
-loader.load(
-    "images/character.png"
-);
+    loader.load("images/character.png");
 
 
-/* =========================
+/* =========================================================
    FLOOR
-========================= */
+========================================================= */
 
-const floorGeometry =
-new THREE.PlaneGeometry(
-    16,
-    16
+const floor = new THREE.Mesh(
+
+    new THREE.PlaneGeometry(
+        16,
+        16
+    ),
+
+    new THREE.MeshBasicMaterial({
+        map: floorTexture
+    })
+
 );
 
-
-const floorMaterial =
-new THREE.MeshBasicMaterial({
-    map: floorTexture
-});
-
-
-const floor =
-new THREE.Mesh(
-    floorGeometry,
-    floorMaterial
-);
-
-
-floor.rotation.x =
--Math.PI / 2;
-
+floor.rotation.x = -Math.PI / 2;
 
 floor.position.y = 0;
-
 
 scene.add(floor);
 
 
-/* =========================
+/* =========================================================
    WALLS
-========================= */
+========================================================= */
 
 const wallMaterial =
-new THREE.MeshBasicMaterial({
-    map: wallTexture
-});
+    new THREE.MeshBasicMaterial({
+        map: wallTexture
+    });
 
+
+/* BACK WALL */
 
 const wallGeometry =
-new THREE.BoxGeometry(
-    16,
-    5,
-    0.2
-);
-
-
-/* Back wall */
+    new THREE.BoxGeometry(
+        16,
+        5,
+        0.2
+    );
 
 const backWall =
-new THREE.Mesh(
-    wallGeometry,
-    wallMaterial
-);
+    new THREE.Mesh(
+        wallGeometry,
+        wallMaterial
+    );
 
 backWall.position.set(
     0,
@@ -530,13 +455,13 @@ backWall.position.set(
 scene.add(backWall);
 
 
-/* Front wall */
+/* FRONT WALL */
 
 const frontWall =
-new THREE.Mesh(
-    wallGeometry,
-    wallMaterial
-);
+    new THREE.Mesh(
+        wallGeometry,
+        wallMaterial
+    );
 
 frontWall.position.set(
     0,
@@ -547,21 +472,21 @@ frontWall.position.set(
 scene.add(frontWall);
 
 
-/* Left wall */
+/* SIDE WALLS */
 
 const sideWallGeometry =
-new THREE.BoxGeometry(
-    0.2,
-    5,
-    16
-);
+    new THREE.BoxGeometry(
+        0.2,
+        5,
+        16
+    );
 
 
 const leftWall =
-new THREE.Mesh(
-    sideWallGeometry,
-    wallMaterial
-);
+    new THREE.Mesh(
+        sideWallGeometry,
+        wallMaterial
+    );
 
 leftWall.position.set(
     -8,
@@ -572,13 +497,11 @@ leftWall.position.set(
 scene.add(leftWall);
 
 
-/* Right wall */
-
 const rightWall =
-new THREE.Mesh(
-    sideWallGeometry,
-    wallMaterial
-);
+    new THREE.Mesh(
+        sideWallGeometry,
+        wallMaterial
+    );
 
 rightWall.position.set(
     8,
@@ -589,26 +512,19 @@ rightWall.position.set(
 scene.add(rightWall);
 
 
-/* =========================
+/* =========================================================
    NPC
-========================= */
-
-const npcMaterial =
-new THREE.SpriteMaterial({
-
-    map:
-    characterTexture,
-
-    transparent: true
-
-});
-
+========================================================= */
 
 const npc =
-new THREE.Sprite(
-    npcMaterial
-);
+    new THREE.Sprite(
 
+        new THREE.SpriteMaterial({
+            map: characterTexture,
+            transparent: true
+        })
+
+    );
 
 npc.position.set(
     0,
@@ -616,20 +532,18 @@ npc.position.set(
     -3
 );
 
-
 npc.scale.set(
     2.2,
     2.8,
     1
 );
 
-
 scene.add(npc);
 
 
-/* =========================
+/* =========================================================
    PLAYER
-========================= */
+========================================================= */
 
 const player = {
 
@@ -642,22 +556,124 @@ const player = {
 };
 
 
-/* =========================
+/* =========================================================
    CAMERA LOOK
-========================= */
+========================================================= */
 
 let yaw = 0;
 
 let pitch = 0;
 
-
 const maxPitch =
-Math.PI / 2.5;
+    Math.PI / 2.5;
+
+let looking = false;
+
+let lastTouchX = 0;
+
+let lastTouchY = 0;
 
 
-/* =========================
+/* =========================================================
+   TOUCH / MOUSE LOOK
+========================================================= */
+
+renderer.domElement.addEventListener(
+    "pointerdown",
+    event => {
+
+        looking = true;
+
+        lastTouchX =
+            event.clientX;
+
+        lastTouchY =
+            event.clientY;
+
+        try {
+
+            renderer.domElement
+                .setPointerCapture(
+                    event.pointerId
+                );
+
+        } catch (e) {}
+
+    }
+);
+
+
+renderer.domElement.addEventListener(
+    "pointermove",
+    event => {
+
+        if (!looking) return;
+
+        const dx =
+            event.clientX -
+            lastTouchX;
+
+        const dy =
+            event.clientY -
+            lastTouchY;
+
+        lastTouchX =
+            event.clientX;
+
+        lastTouchY =
+            event.clientY;
+
+
+        yaw -= dx * 0.004;
+
+        pitch -= dy * 0.004;
+
+
+        pitch =
+            Math.max(
+                -maxPitch,
+                Math.min(
+                    maxPitch,
+                    pitch
+                )
+            );
+
+    }
+);
+
+
+renderer.domElement.addEventListener(
+    "pointerup",
+    event => {
+
+        looking = false;
+
+        try {
+
+            renderer.domElement
+                .releasePointerCapture(
+                    event.pointerId
+                );
+
+        } catch (e) {}
+
+    }
+);
+
+
+renderer.domElement.addEventListener(
+    "pointercancel",
+    () => {
+
+        looking = false;
+
+    }
+);
+
+
+/* =========================================================
    KEYBOARD
-========================= */
+========================================================= */
 
 const keys = {};
 
@@ -686,9 +702,9 @@ window.addEventListener(
 );
 
 
-/* =========================
-   MOBILE CONTROLS
-========================= */
+/* =========================================================
+   MOBILE MOVEMENT BUTTONS
+========================================================= */
 
 function buttonControl(
     id,
@@ -696,7 +712,7 @@ function buttonControl(
 ) {
 
     const button =
-    document.getElementById(id);
+        document.getElementById(id);
 
 
     button.addEventListener(
@@ -705,41 +721,39 @@ function buttonControl(
 
             event.preventDefault();
 
+            event.stopPropagation();
+
             keys[key] = true;
 
         }
     );
 
 
-    button.addEventListener(
-        "pointerup",
+    const release =
         event => {
 
             event.preventDefault();
 
+            event.stopPropagation();
+
             keys[key] = false;
 
-        }
-    );
+        };
 
+
+    button.addEventListener(
+        "pointerup",
+        release
+    );
 
     button.addEventListener(
         "pointercancel",
-        () => {
-
-            keys[key] = false;
-
-        }
+        release
     );
-
 
     button.addEventListener(
         "pointerleave",
-        () => {
-
-            keys[key] = false;
-
-        }
+        release
     );
 
 }
@@ -750,18 +764,15 @@ buttonControl(
     "w"
 );
 
-
 buttonControl(
     "down",
     "s"
 );
 
-
 buttonControl(
     "left",
     "a"
 );
-
 
 buttonControl(
     "right",
@@ -769,163 +780,48 @@ buttonControl(
 );
 
 
-/* =========================
-   TOUCH CAMERA
-========================= */
-
-let looking = false;
-
-let lastTouchX = 0;
-
-let lastTouchY = 0;
-
-
-renderer.domElement.addEventListener(
-    "pointerdown",
-    event => {
-
-        looking = true;
-
-        lastTouchX =
-        event.clientX;
-
-        lastTouchY =
-        event.clientY;
-
-        renderer.domElement
-        .setPointerCapture(
-            event.pointerId
-        );
-
-    }
-);
-
-
-renderer.domElement.addEventListener(
-    "pointermove",
-    event => {
-
-        if (!looking)
-            return;
-
-
-        const dx =
-        event.clientX -
-        lastTouchX;
-
-
-        const dy =
-        event.clientY -
-        lastTouchY;
-
-
-        lastTouchX =
-        event.clientX;
-
-
-        lastTouchY =
-        event.clientY;
-
-
-        yaw -=
-        dx * 0.004;
-
-
-        pitch -=
-        dy * 0.004;
-
-
-        pitch =
-        Math.max(
-            -maxPitch,
-            Math.min(
-                maxPitch,
-                pitch
-            )
-        );
-
-    }
-);
-
-
-renderer.domElement.addEventListener(
-    "pointerup",
-    event => {
-
-        looking = false;
-
-        try {
-
-            renderer.domElement
-            .releasePointerCapture(
-                event.pointerId
-            );
-
-        } catch(e) {}
-
-    }
-);
-
-
-renderer.domElement.addEventListener(
-    "pointercancel",
-    () => {
-
-        looking = false;
-
-    }
-);
-
-
-/* =========================
+/* =========================================================
    DIALOGUE
-========================= */
+========================================================= */
 
 const dialogue =
-document.getElementById(
-    "dialogue"
-);
-
+    document.getElementById(
+        "dialogue"
+    );
 
 const speaker =
-document.getElementById(
-    "speaker"
-);
-
+    document.getElementById(
+        "speaker"
+    );
 
 const text =
-document.getElementById(
-    "text"
-);
-
+    document.getElementById(
+        "text"
+    );
 
 const interactHint =
-document.getElementById(
-    "interactHint"
-);
+    document.getElementById(
+        "interactHint"
+    );
 
+
+/* DIALOGUE LINES */
 
 const dialogueLines = [
 
     {
         speaker: "AAA",
-
-        text:
-        "AAAAAAA"
+        text: "AAAAAAA"
     },
 
     {
         speaker: "AAA",
-
-        text:
-        "Hey... can you hear me?"
+        text: "Hey... can you hear me?"
     },
 
     {
         speaker: "AAA",
-
-        text:
-        "Finally, you came."
+        text: "Finally, you came."
     }
 
 ];
@@ -936,28 +832,36 @@ let dialogueIndex = 0;
 let inDialogue = false;
 
 
-/* =========================
+/*
+    After dialogue ends, the player must
+    walk away before talking again.
+*/
+
+let interactionLocked = false;
+
+
+/* =========================================================
    START DIALOGUE
-========================= */
+========================================================= */
 
 function startDialogue() {
 
-    if (inDialogue)
-        return;
+    if (inDialogue) return;
+
+    if (interactionLocked) return;
 
 
     inDialogue = true;
-
 
     dialogueIndex = 0;
 
 
     interactHint.style.display =
-    "none";
+        "none";
 
 
     dialogue.style.display =
-    "block";
+        "block";
 
 
     showDialogueLine();
@@ -965,36 +869,35 @@ function startDialogue() {
 }
 
 
-/* =========================
-   SHOW LINE
-========================= */
+/* =========================================================
+   SHOW DIALOGUE LINE
+========================================================= */
 
 function showDialogueLine() {
 
     const line =
-    dialogueLines[
-        dialogueIndex
-    ];
+        dialogueLines[
+            dialogueIndex
+        ];
 
 
     speaker.textContent =
-    line.speaker;
+        line.speaker;
 
 
     text.textContent =
-    line.text;
+        line.text;
 
 }
 
 
-/* =========================
-   NEXT LINE
-========================= */
+/* =========================================================
+   NEXT DIALOGUE
+========================================================= */
 
 function nextDialogue() {
 
-    if (!inDialogue)
-        return;
+    if (!inDialogue) return;
 
 
     dialogueIndex++;
@@ -1006,13 +909,20 @@ function nextDialogue() {
     ) {
 
         dialogue.style.display =
-        "none";
+            "none";
 
 
         inDialogue = false;
 
 
         dialogueIndex = 0;
+
+
+        /*
+           Prevent immediate reopening.
+        */
+
+        interactionLocked = true;
 
 
         return;
@@ -1025,11 +935,17 @@ function nextDialogue() {
 }
 
 
+/* =========================================================
+   DIALOGUE CLICK
+========================================================= */
+
 dialogue.addEventListener(
     "pointerdown",
     event => {
 
         event.preventDefault();
+
+        event.stopPropagation();
 
         nextDialogue();
 
@@ -1037,20 +953,19 @@ dialogue.addEventListener(
 );
 
 
-/* =========================
+/* =========================================================
    NPC DISTANCE
-========================= */
+========================================================= */
 
 function getNPCDistance() {
 
     const dx =
-    player.x -
-    npc.position.x;
-
+        player.x -
+        npc.position.x;
 
     const dz =
-    player.z -
-    npc.position.z;
+        player.z -
+        npc.position.z;
 
 
     return Math.sqrt(
@@ -1061,16 +976,16 @@ function getNPCDistance() {
 }
 
 
-/* =========================
-   INTERACTION HINT
-========================= */
+/* =========================================================
+   NPC INTERACTION
+========================================================= */
 
 function updateInteraction() {
 
     if (inDialogue) {
 
         interactHint.style.display =
-        "none";
+            "none";
 
         return;
 
@@ -1078,39 +993,61 @@ function updateInteraction() {
 
 
     const distance =
-    getNPCDistance();
+        getNPCDistance();
 
 
-    if (distance < 2.7) {
+    /*
+       Unlock the NPC after
+       walking far enough away.
+    */
+
+    if (
+        interactionLocked &&
+        distance > 3.5
+    ) {
+
+        interactionLocked = false;
+
+    }
+
+
+    /*
+       Show the interaction hint.
+    */
+
+    if (
+        distance < 2.7 &&
+        !interactionLocked
+    ) {
 
         interactHint.style.display =
-        "block";
+            "block";
 
     } else {
 
         interactHint.style.display =
-        "none";
+            "none";
 
     }
 
 }
 
 
-/* =========================
-   CLICK NPC
-========================= */
+/* =========================================================
+   START DIALOGUE BY CLICKING NEAR NPC
+========================================================= */
 
 renderer.domElement.addEventListener(
     "click",
     event => {
 
-        if (inDialogue)
-            return;
+        if (inDialogue) return;
+
+        if (interactionLocked) return;
 
 
         if (
-            getNPCDistance() <
-            2.7
+            getNPCDistance() < 2.7
         ) {
 
             startDialogue();
@@ -1121,14 +1058,14 @@ renderer.domElement.addEventListener(
 );
 
 
-/* =========================
+/* =========================================================
    MUSIC
-========================= */
+========================================================= */
 
 const bgMusic =
-document.getElementById(
-    "bgMusic"
-);
+    document.getElementById(
+        "bgMusic"
+    );
 
 
 bgMusic.volume = 0.5;
@@ -1136,60 +1073,83 @@ bgMusic.volume = 0.5;
 
 function startMusic() {
 
+    if (!bgMusic.paused) return;
+
+
     bgMusic
-    .play()
-    .catch(() => {});
+        .play()
+        .catch(
+            error => {
+
+                console.log(
+                    "Music could not start:",
+                    error
+                );
+
+            }
+        );
 
 }
 
 
+/*
+   Browsers usually require
+   user interaction before
+   playing audio.
+*/
+
 document.addEventListener(
     "pointerdown",
-    startMusic,
-    { once: true }
+    startMusic
+);
+
+document.addEventListener(
+    "touchstart",
+    startMusic
+);
+
+document.addEventListener(
+    "click",
+    startMusic
 );
 
 
-/* =========================
-   UPDATE CAMERA
-========================= */
+/* =========================================================
+   CAMERA UPDATE
+========================================================= */
 
 function updateCamera() {
 
     camera.position.x =
-    player.x;
-
+        player.x;
 
     camera.position.y =
-    1.6;
-
+        1.6;
 
     camera.position.z =
-    player.z;
-
-
-    camera.rotation.order =
-    "YXZ";
+        player.z;
 
 
     camera.rotation.y =
-    yaw;
-
+        yaw;
 
     camera.rotation.x =
-    pitch;
+        pitch;
 
 }
 
 
-/* =========================
+/* =========================================================
    MOVEMENT
-========================= */
+========================================================= */
 
 function updateMovement() {
 
-    if (inDialogue)
-        return;
+    /*
+       Player cannot move during dialogue.
+    */
+
+    if (inDialogue) return;
 
 
     let forward = 0;
@@ -1197,7 +1157,7 @@ function updateMovement() {
     let right = 0;
 
 
-    /* Forward */
+    /* FORWARD / BACK */
 
     if (
         keys["w"] ||
@@ -1209,8 +1169,6 @@ function updateMovement() {
     }
 
 
-    /* Backward */
-
     if (
         keys["s"] ||
         keys["arrowdown"]
@@ -1221,7 +1179,7 @@ function updateMovement() {
     }
 
 
-    /* Left */
+    /* LEFT / RIGHT */
 
     if (
         keys["a"] ||
@@ -1233,8 +1191,6 @@ function updateMovement() {
     }
 
 
-    /* Right */
-
     if (
         keys["d"] ||
         keys["arrowright"]
@@ -1245,67 +1201,70 @@ function updateMovement() {
     }
 
 
-    /* Camera direction */
+    /*
+       Movement follows the
+       direction of the camera.
+    */
 
     const forwardX =
-    -Math.sin(yaw);
-
+        -Math.sin(yaw);
 
     const forwardZ =
-    -Math.cos(yaw);
+        -Math.cos(yaw);
 
 
     const rightX =
-    Math.cos(yaw);
-
+        Math.cos(yaw);
 
     const rightZ =
-    -Math.sin(yaw);
+        -Math.sin(yaw);
 
 
-    player.x +=
-    (
+    player.x += (
+
         forwardX * forward +
         rightX * right
-    )
-    * player.speed;
+
+    ) * player.speed;
 
 
-    player.z +=
-    (
+    player.z += (
+
         forwardZ * forward +
         rightZ * right
-    )
-    * player.speed;
+
+    ) * player.speed;
 
 
-    /* Room boundaries */
+    /*
+       Current room boundaries.
+    */
 
     player.x =
-    Math.max(
-        -7.5,
-        Math.min(
-            7.5,
-            player.x
-        )
-    );
+        Math.max(
+            -7.5,
+            Math.min(
+                7.5,
+                player.x
+            )
+        );
 
 
     player.z =
-    Math.max(
-        -7.5,
-        Math.min(
-            7.5,
-            player.z
-        )
-    );
+        Math.max(
+            -7.5,
+            Math.min(
+                7.5,
+                player.z
+            )
+        );
 
 }
 
 
-/* =========================
+/* =========================================================
    GAME LOOP
-========================= */
+========================================================= */
 
 function animate() {
 
@@ -1332,17 +1291,17 @@ function animate() {
 animate();
 
 
-/* =========================
+/* =========================================================
    RESIZE
-========================= */
+========================================================= */
 
 window.addEventListener(
     "resize",
     () => {
 
         camera.aspect =
-        window.innerWidth /
-        window.innerHeight;
+            window.innerWidth /
+            window.innerHeight;
 
 
         camera.updateProjectionMatrix();
